@@ -1,5 +1,6 @@
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import useDashboardProducts from "../../hooks/useDashboardProducts";
+import axios from "axios";
 import ProductsSectionSkeleton from "../ProductsSectionSkeleton";
 import { Fragment } from "react";
 import SearchBar from "../MenuSearchBar";
@@ -15,6 +16,7 @@ import PaginationButtons from "../PaginationButtons";
 import editIcon from "../../img/pencil-alt-solid.svg";
 import DeleteIcon from "../../img/trash-alt-regular.svg";
 import { withError } from "./../withError";
+import {useNavigate} from 'react-router-dom';
 
 const StyledSection = styled.section`
   min-height: 100vh;
@@ -39,6 +41,7 @@ const StyledSection = styled.section`
     margin: -60px 0 0 -60px;
   }
 `;
+
 export const FiltersBoard = styled.div`
   margin: 30px 15px 0;
   display: flex;
@@ -50,11 +53,13 @@ export const FiltersBoard = styled.div`
     margin: 0 10px 10px 0;
   }
 `;
+
 const EditButton = styled(CartButton)`
   height: 50px;
   background: #3f51b5;
   transform: scale(0.7);
 `;
+
 const DeleteOfDatabaseButton = styled(EditButton)`
   margin: 0;
   background: #e83c2e;
@@ -64,6 +69,7 @@ const DeleteOfDatabaseButton = styled(EditButton)`
   margin-left: auto;
   margin-right: 50px;
 `;
+
 const Icon = styled(CartIcon)`
   transform: scale(1.2);
 `;
@@ -73,42 +79,61 @@ const StyledProductsSection = styled(ProductsSection)`
 `;
 
 function DashboardProducts() {
-  let {
-    populatedCategories,
-    isLoading,
-    page,
-    maxPage,
-    products,
-    setCategory,
-    setTitle,
-    handleEdit,
-    handleDelete,
-    setPage,
-    setActiveProducts,
-    isFirstRender,
-    sorting,
-    category,
-    activeProducts,
-    title,
-  } = useDashboardProducts();
+  const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(1);
+  const [products, setProducts] = useState([]);
+  const [category, setCategory] = useState("");
+  const [activeProducts, setActiveProducts] = useState("");
+  const [title, setTitle] = useState("");
+  const [isFirstRender, setIsFirstRender] = useState(true);
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    fetchData();
+  }, [page, category, activeProducts, title]);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      // Adjust the API endpoint as needed
+      const response = await axios.get(`http://localhost:7000/api/products`);
+      console.log("response",response)
+      setProducts(response.data.data);
+      // Set other state variables as needed
+      setIsLoading(false);
+      setIsFirstRender(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsLoading(false);
+    }
+  };
+
+  // Implement the edit logic here
+  const handleEdit = (product) => {
+    navigate('/dashboard/editProduct')
+  };
+
+  // Implement the delete logic here
+  const handleDelete = async (productId) => {
+    try {
+      await axios.delete(`http://localhost:7000/api/products/${productId}`);
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product._id !== productId)
+      );
+      console.log("Product deleted successfully:", productId);
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
   return (
     <StyledSection>
       <DashboardNav />
-      <SectionTitle>mis productos</SectionTitle>
+      <SectionTitle>My Products</SectionTitle>
 
       <SearchBar defaultValue={title} setSearch={setTitle} />
       <FiltersBoard>
-        <FilterCategoryOptions
-          defaultValue={category}
-          categories={populatedCategories}
-          setCategoryPreferece={setCategory}
-        />
-
-        <FilterProductsStateOptions
-          defaultValue={activeProducts}
-          setStatePreferece={setActiveProducts}
-        />
+        {/* Add your filter components here */}
       </FiltersBoard>
 
       {isLoading && <LoaderSpinner />}
@@ -139,7 +164,7 @@ function DashboardProducts() {
           ))}
         </StyledProductsSection>
       )}
-      <PaginationButtons setPage={setPage} page={page} maxPage={maxPage} />
+      {/* Add your pagination component here */}
     </StyledSection>
   );
 }

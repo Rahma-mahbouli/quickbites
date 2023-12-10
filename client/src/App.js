@@ -173,7 +173,7 @@ function App() {
               path="/dashboard/editProduct"
               element={<DashboardEditProduct/>}
             />
-            <Route path="/dashboard/users" element={DashboardUsers} />
+            <Route path="/dashboard/users" element={<DashboardUsers/>} />
             <Route
               path="/dashboard/orders"
               exact

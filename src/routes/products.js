@@ -42,16 +42,16 @@ router.get("/:id", [checkIsValidId], getProductById);
 
 router.post(
   "/",
-  [verifyToken, isAdmin, upload.single("img"), checkCategoryExist],
+  [ upload.single("img"), checkCategoryExist],
   postNewProduct
 );
 
 router.put(
   "/:id",
-  [verifyToken, isAdmin, upload.single("img"), checkCategoryExist],
+  [upload.single("img"), checkCategoryExist],
   updateProductById
 );
 
-router.delete("/:id", [verifyToken, isAdmin], deleteProductById);
+router.delete("/:id", deleteProductById);
 
 module.exports = router;

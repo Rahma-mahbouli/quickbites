@@ -18,6 +18,7 @@ const EditModal = styled.section`
   display: ${(props) => (props.isEditing === true ? "block" : "none")};
   z-index: 1000;
 `;
+
 const EditTable = styled.div`
   max-width: 370px;
   width: 100%;
@@ -26,11 +27,11 @@ const EditTable = styled.div`
   margin: 0 auto;
   position: absolute;
   top: 50%;
-
   border-radius: 5px;
   left: 50%;
   transform: translate(-50%, -50%);
 `;
+
 const EditTableBody = styled.div`
   padding: 10px 15px 20px;
   color: #ffffff;
@@ -46,10 +47,10 @@ const EditTableBody = styled.div`
     margin-bottom: 10px;
   }
 `;
+
 const EditTableHeader = styled.div`
   background: ${(props) => props.theme.orange};
   width: 100%;
-
   padding: 8px 15px;
   text-shadow: ${(props) => props.theme.darkTextShadow};
   box-shadow: inset 0 0 20px 5px rgb(23 23 23 / 15%);
@@ -59,10 +60,12 @@ const EditForm = styled.form`
   display: flex;
   flex-flow: column;
   align-items: center;
+
   & > ${LoaderSpinner} {
     margin-bottom: 10px;
   }
-  & > ${FormButtons} > inputs {
+
+  & > ${FormButtons} > input {
     transform: scale(0.8);
   }
 
@@ -72,27 +75,27 @@ const EditForm = styled.form`
 `;
 
 export default function EditUserForm({ user, isEditing, setIsEditing }) {
-  const { serverError, isFormLoading, handelReset, handelSubmit } =
+  const { serverError, isFormLoading, handleReset, handleSubmit } =
     useEditUserModal({ setIsEditing });
 
   return (
     <EditModal isEditing={isEditing}>
       <EditTable>
         <EditTableHeader>
-          <TableTitle>Editar Usuario</TableTitle>
+          <TableTitle>Edit User</TableTitle>
         </EditTableHeader>
         <EditTableBody>
           <h3>{user?.name}</h3>
-          <h4>Selecciónar Roles</h4>
+          <h4>Select Roles</h4>
 
           <EditForm
-            onSubmit={(e) => handelSubmit(e, user._id)}
-            onReset={handelReset}
+            onSubmit={(e) => handleSubmit(e, user._id)}
+            onReset={handleReset}
           >
             <OptionList name="role">
               <Option value="user">User</Option>
               <Option value="admin">Admin</Option>
-              <Option value="moderator">Moderador</Option>
+              <Option value="moderator">Moderator</Option>
             </OptionList>
             {isFormLoading ? (
               <LoaderSpinner small />

@@ -16,7 +16,7 @@ const {
   checkIsValidUpdate,
 } = require("../middleware/userValidator");
 
-router.get("/", [verifyToken], getAllUsers);
+router.get("/",  getAllUsers);
 router.get("/:id", [verifyToken], getUserById);
 
 router.put("/me", [verifyToken, checkIsValidUpdate], updateProfileById);

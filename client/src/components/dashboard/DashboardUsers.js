@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { withError } from "./../withError";
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import { useStorage } from "../../context/useStorage";
 import DashboardNav from "../DashboardNav";
 import SectionTitle from "../SectionTitle";
@@ -113,13 +113,13 @@ function UserInfoCell({ user, handelClick }) {
         <Fragment>
           {user?.number && (
             <p>
-              <b>Número:</b>
+              <b>Number:</b>
               {user?.number}
             </p>
           )}
           {user?.address && (
             <p>
-              <b>Dirección:</b>
+              <b>Address:</b>
               {user?.address}
             </p>
           )}
@@ -142,23 +142,43 @@ function UserInfoCell({ user, handelClick }) {
 function DashboardUsers() {
   const [editingUser, setEditingUser] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [users, setUsers] = useState([]);
 
   const handelClick = (user) => {
     setEditingUser(user);
     setIsEditing(true);
   };
-  const { users } = useStorage();
 
-  const normalUsers = users?.filter((user) => user?.roles[0]?.name === "user");
-  const adminsAndModerators = users?.filter(
+  useEffect(() => {
+    // Fetch users from the API endpoint
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("http://localhost:7000/api/users/");
+        if (response.ok) {
+          const data = await response.json();
+          setUsers(data);
+        } else {
+          console.error("Failed to fetch users");
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []); 
+
+  const normalUsers = users.filter((user) => user?.name !== "admin" && user?.name !== "moderator");
+
+  const adminsAndModerators = users.filter(
     (user) =>
-      user?.roles[0]?.name === "admin" || user?.roles[0]?.name === "moderator"
+      user?.name === "admin" || user?.name === "moderator"
   );
 
   return (
     <Page>
       <DashboardNav />
-      <SectionTitle>Usuarios</SectionTitle>
+      <SectionTitle>Users</SectionTitle>
       <EditUserModal
         user={editingUser}
         isEditing={isEditing}
@@ -168,7 +188,7 @@ function DashboardUsers() {
       <TablesContainer>
         <Table>
           <TableHeader>
-            <TableTitle>Usuarios</TableTitle>
+            <TableTitle>Users</TableTitle>
           </TableHeader>
 
           {normalUsers.map((user) => (
@@ -176,19 +196,19 @@ function DashboardUsers() {
               key={user._id}
               user={user}
               handelClick={handelClick}
-            ></UserInfoCell>
+            />
           ))}
         </Table>
         <Table>
           <TableHeader>
-            <TableTitle>Admins y Mediadores</TableTitle>
+            <TableTitle>Admins and Moderators</TableTitle>
           </TableHeader>
           {adminsAndModerators.map((user) => (
             <UserInfoCell
               key={user._id}
               user={user}
               handelClick={handelClick}
-            ></UserInfoCell>
+            />
           ))}
         </Table>
       </TablesContainer>

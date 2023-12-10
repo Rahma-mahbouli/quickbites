@@ -10,7 +10,7 @@ import {
 } from "../account/UserOrdersPage";
 import { LoaderSpinner } from "./../LoaderSpinner";
 import { NotFoundMessage } from "../menu/ProductsSection";
-import SectionTitle  from "../SectionTitle";
+import SectionTitle from "../SectionTitle";
 import { FiltersBoard } from "./DashboardProducts";
 import FilterOrderStateOptions from "./../FilterOrderStateOptions";
 import SortOrdersOptions from "./../SortOrdersOptions";
@@ -49,6 +49,7 @@ export const Page = styled.section`
     margin: 30px 5px 0;
   }
 `;
+
 export const TableHead = styled.thead`
   background-color: #171717;
   color: #fcba1c;
@@ -58,6 +59,7 @@ export const TableHead = styled.thead`
     font-size: 19px;
   }
 `;
+
 export const OrdersTable = styled.table`
   width: 900px;
   margin: 20px auto 0;
@@ -103,11 +105,11 @@ export default function DashboardOrders({ closeNotification }) {
   return (
     <Page isLoading={isLoading}>
       <DashboardNav />
-      <SectionTitle>Pedidos</SectionTitle>
+      <SectionTitle>Orders</SectionTitle>
 
       <SearchBar
         defaultValue={orderID}
-        placeholder="Número de orden..."
+        placeholder="Order Number..."
         setSearch={setOrderID}
       />
       <FiltersBoard>
@@ -122,20 +124,15 @@ export default function DashboardOrders({ closeNotification }) {
         />
       </FiltersBoard>
 
-      <RefreshButton
-        data-testid="refresh-button"
-        onClick={() => handleRefresh()}
-      >
-        <RefreshIcon src={refreshIcon} title="Refrescar Página" />
+      <RefreshButton data-testid="refresh-button" onClick={() => handleRefresh()}>
+        <RefreshIcon src={refreshIcon} title="Refresh Page" />
       </RefreshButton>
       {isLoading ? <LoaderSpinner /> : null}
 
       {isLoading && isFirstRender && <OrdersTableSkeleton />}
 
       {!isLoading && !isFirstRender && orders?.length === 0 && (
-        <NotFoundMessage>
-          No se han encontrado coincidencias, intenta de nuevo!!
-        </NotFoundMessage>
+        <NotFoundMessage>No matches found, please try again!!</NotFoundMessage>
       )}
 
       {orders?.length !== 0 && (
@@ -143,35 +140,24 @@ export default function DashboardOrders({ closeNotification }) {
           <OrdersTable>
             <TableHead>
               <tr>
-                <th>Nº de Pedido</th>
-                <th>Fecha</th>
-                <th>Dirección</th>
+                <th>Order Number</th>
+                <th>Date</th>
+                <th>Address</th>
                 <th>Total</th>
-                <th>Estado</th>
+                <th>Status</th>
               </tr>
             </TableHead>
             <tbody>
               {orders?.map((order) => (
-                <tr
-                  key={order?.orderID}
-                  onClick={(e) => seeDetails(order?._id)}
-                >
+                <tr key={order?.orderID} onClick={(e) => seeDetails(order?._id)}>
                   <td>{order?.orderID}</td>
                   <td>
                     <span>
-                      {
-                        new Date(order.states[0].date)
-                          .toLocaleString()
-                          .split(" ")[0]
-                      }
+                      {new Date(order.states[0].date).toLocaleString().split(" ")[0]}
                     </span>
                     <br></br>
                     <span>
-                      {
-                        new Date(order.states[0].date)
-                          .toLocaleString()
-                          .split(" ")[1]
-                      }
+                      {new Date(order.states[0].date).toLocaleString().split(" ")[1]}
                     </span>
                   </td>
                   <td>{order?.client[0].address}</td>

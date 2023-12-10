@@ -3,7 +3,7 @@ const { Role } = require("../models/role.model");
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().populate("roles");
+    const users = await User.find()
 
     return res.status(200).json(users);
   } catch (error) {

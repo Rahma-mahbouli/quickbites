@@ -44,25 +44,25 @@ export default function UpdateNewProductForm() {
           <FormTitle>Editar {productToEdit?.name}</FormTitle>
 
           <ProductNameInput
-            register={register}
+            
             errors={errors}
             defaultValue={productToEdit.name}
           />
 
           <ProductSizeInput
-            register={register}
+            
             errors={errors}
             defaultValue={productToEdit.size}
           />
 
           <ProductPriceInput
-            register={register}
+            
             errors={errors}
             defaultValue={productToEdit.price}
           />
 
           <CategoriesOptionsInput
-            register={register}
+            
             errors={errors}
             categories={categories}
             defaultValue={productToEdit.category}
@@ -70,11 +70,11 @@ export default function UpdateNewProductForm() {
 
           <ProductDescriptionTextArea
             defaultValue={productToEdit.description}
-            register={register}
+            
             errors={errors}
           />
 
-          <ImageUploader register={register} errors={errors} isNotRequired />
+          <ImageUploader  errors={errors} isNotRequired />
           <ProductState state={productToEdit?.active ? "checked" : false} />
 
           {formIsLoading && <LoaderSpinner small />}
