@@ -8,16 +8,17 @@ import emaIlcon from "../../img/envelope-regular.svg";
 import { Link, Icon, ListItem, List } from "../Footer";
 
 const StyledContact = styled.article`
-box-sizing:border-box:
-max-width:100%;
-padding:20px 0;
-display:flex;
-flex-wrap:wrap;
-& > * {
-padding:10px  15px;
-height:100%;
-}
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  & > * {
+    padding: 10px 15px;
+    height: 100%;
+  }
 `;
+
 const FormSection = styled.div`
   width: 100%;
   flex: 1 1 450px;
@@ -26,6 +27,7 @@ const FormSection = styled.div`
     padding: 10px 32px;
   }
 `;
+
 const Form = styled.form`
   width: 100%;
   height: 100%;
@@ -55,6 +57,7 @@ const InfoSection = styled.div`
     min-height: 350px;
   }
 `;
+
 export const TextInput = styled.input`
   &::placeholder {
     font-weight: 500;
@@ -91,22 +94,25 @@ const Textarea = styled.textarea`
   min-width: 100%;
   max-width: 100%;
 `;
+
 export const ErrorMessage = styled.small`
   color: #bf0000;
   margin: -10px auto 4px 5%;
   display: block;
 `;
+
 const ContactTitle = styled.h2`
   @media screen and (min-width: 750px) {
     margin-top: -40px;
   }
 `;
+
 const ContactLink = styled(Link)`
   color: #000;
 `;
 
 export default function ContactForm() {
-  const { register, handleSubmit, errors, onSubmit } = useContactForm();
+  const { handleSubmit, errors, onSubmit } = useContactForm();
 
   return (
     <StyledContact>
@@ -117,16 +123,8 @@ export default function ContactForm() {
           )}
           <TextInput
             type="text"
-            placeholder="Tu Nombre Completo..."
+            placeholder="Your Full Name..."
             name="userName"
-            ref={register({
-              required: "*El campo es requrido",
-
-              pattern: {
-                value: /^[A-Za-zñÑáÁéÉíÍóÓúÚÜü\s\w]+$/,
-                message: "*Nombre no valido",
-              },
-            })}
             style={{ borderColor: errors.userName && "#bf0000" }}
           />
           {errors.userEmail && (
@@ -134,55 +132,35 @@ export default function ContactForm() {
           )}
           <TextInput
             type="email"
-            placeholder="Tu email..."
+            placeholder="Your email..."
             name="userEmail"
-            ref={register({
-              required: "*El campo es requrido",
-
-              pattern: {
-                value:
-                  /^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$/,
-                meassage: "*Email no valido",
-              },
-            })}
             style={{ borderColor: errors.userEmail && "#bf0000" }}
           />
           {errors.subject && (
             <ErrorMessage>{errors.subject.message}</ErrorMessage>
           )}
-
           <TextInput
             type="text"
-            placeholder="Asunto..."
+            placeholder="Subject..."
             name="subject"
-            ref={register({
-              required: "*El campo es requrido",
-            })}
             style={{ borderColor: errors.subject && "#bf0000" }}
           />
           {errors.userMessage && (
             <ErrorMessage>{errors.userMessage.message}</ErrorMessage>
           )}
           <Textarea
-            placeholder="Tu mensaje..."
+            placeholder="Your message..."
             name="userMessage"
-            ref={register({
-              required: "*El campo es requerido",
-              maxLength: {
-                value: 255,
-                message: "*Tu mensaje no debe exceder los 255 carácteres",
-              },
-            })}
             style={{ borderColor: errors.userMessage && "#bf0000" }}
           />
-          <ButtonPrimary as="input" type="submit" value="Enviar mensaje" />
+          <ButtonPrimary as="input" type="submit" value="Send Message" />
         </Form>
       </FormSection>
       <InfoSection>
-        <ContactTitle>Contactenos</ContactTitle>
+        <ContactTitle>Contact Us</ContactTitle>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit nulla accumsan
-          metus. Ipsum dolor sit amet, consectetur adipiscing elit nulla
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan
+          metus. Ipsum dolor sit amet, consectetur adipiscing elit. Nulla
           accumsan.
         </p>
         <List>

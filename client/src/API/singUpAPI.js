@@ -1,14 +1,15 @@
+import { BASE_URL } from "../Base_URL";
 import { POST } from "../utils/http";
 
 async function singUpAPI({
   setIsFormLoading,
   setServerError,
-
-  history,
+  navigate,
   info,
 }) {
+ 
   try {
-    const { response, json } = await POST("/api/auth/singUp", info);
+    const { response, json } = await POST(`${BASE_URL}/api/auth/signup`, info);
 
     setIsFormLoading(false);
 
@@ -20,7 +21,7 @@ async function singUpAPI({
       localStorage.setItem("toConfirmUser", email);
 
       setTimeout(() => {
-        return history.push("/#/authentication/confirmation");
+        return navigate("/#/authentication/confirmation");
       }, 1000);
     }
 

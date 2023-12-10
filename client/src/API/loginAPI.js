@@ -1,5 +1,5 @@
+import { BASE_URL } from "../Base_URL";
 import usersAPI from "./usersAPI";
-
 import { POST } from "../utils/http";
 async function loginAPI({
   info,
@@ -17,7 +17,8 @@ async function loginAPI({
   try {
     setIsFormLoading(true);
 
-    const { json } = await POST("/api/auth/login", info);
+    const { json } = await POST(`${BASE_URL}/api/auth/login`, info);
+    console.log('info',info)
 
     setIsFormLoading(false);
 
@@ -33,23 +34,23 @@ async function loginAPI({
 
       setIsLogin();
 
-      if (roles[0].name === "admin") {
+      if (user.name === "admin") {
         setIsAdmin(true);
 
         await usersAPI({ setAllUsers, token });
 
         setIsLoading(false);
 
-        return history.push("/dashboard/orders");
+        return navigate("/dashboard/orders");
       }
-      if (roles[0].name === "moderator") {
+      if (user.name === "moderator") {
         setIsModerator(true);
         setIsLoading(false);
-        return history.push("/dashboard/myProducts");
+        return navigate("/dashboard/myProducts");
       }
 
       setIsLoading(false);
-      return history.push("/menu");
+      return navigate("/menu");
     }
 
     setServerError(json.message);

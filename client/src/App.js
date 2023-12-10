@@ -57,32 +57,33 @@ function App() {
     setIsLoading,
   } = useStorage();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:7000/api/users/");
-        const data = await response.json();
-        const isAdmin = data.some((user) => user.name === "admin");
-        const isModerator = data.some((user) => user.name === "moderator");
-
-        if (isAdmin) {
-          setIsAdmin(true);
-        } else if (isModerator) {
-          setIsModerator(true);
-        }
-
-        setIsLogin(true);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        setToken("");
-        setIsNotLogin();
-        setIsAdmin(false);
-        setIsModerator(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch("/api/users/");
+  //       const data = await response.json();
+  //       const isAdmin = data.some((user) => user.name === "admin");
+  //       const isModerator = data.some((user) => user.name === "moderator");
+  
+  //       if (isAdmin) {
+  //         setIsAdmin(true);
+  //       } else if (isModerator) {
+  //         setIsModerator(true);
+  //       }
+  
+  //       setIsLogin(true);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //       setToken("");
+  //       setIsNotLogin();
+  //       setIsAdmin(false);
+  //       setIsModerator(false);
+  //     }
+  //   };
+  
+  //   fetchData();
+  // }, []);
+  
 
   useEffect(() => {
     const getCategoriesAPI = async () => {
@@ -133,15 +134,66 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/authentication/login" element={<Login />} />
-            <Route path="/authentication/singUp" element={<SignUp />} />
+            <Route path="/authentication/signUp" element={<SignUp />} />
             <Route
               path="/authentication/resetPassword/:token"
               element={<ResetPassword />}
             />
             <Route path="/contact" element={<Contact />} />
+            {/* <PublicRoute
+              path="/authentication/confirmation"
+              component={EmailConfirmationModal}
+            />
+            <PublicRoute path="/myAccount/myProfile" component={MyProfile} />
+            <PublicRoute
+              path="/myAccount/editProfile"
+              component={EditMyProfile}
+            />
+            <PublicRoute
+              path="/myAccount/myOrders"
+              exact
+              component={() => (
+                <UserOrdersPage closeNotification={closeNewOrderNotification} />
+              )}
+            />
+
+            <PublicRoute
+              path="/myAccount/myOrders/:orderID"
+              component={UserOrderDetailsPage}
+            /> */}
+            <Route
+              path="/dashboard/myProducts"
+              element={<DashboardProducts/>}
+            />
+            <Route
+              path="/dashboard/newProduct"
+              element={<DashboardNewProduct/>}
+            />
+            <Route
+              path="/dashboard/editProduct"
+              element={<DashboardEditProduct/>}
+            />
+            <Route path="/dashboard/users" element={DashboardUsers} />
+            <Route
+              path="/dashboard/orders"
+              exact
+              element={() => (
+                <DashboardOrders
+                  closeNotification={closeActualizationNotification}
+                />
+              )}
+            />
+            <Route
+              path="/dashboard/orders/:orderID"
+              element={<DashboardOrderDetails/>}
+            />
+            <Route
+              path="/dashboard/categories"
+              element={<DashboardCategories/>}
+            />
           </Routes>
         </Suspense>
-        <Footer />
+        {/* <Footer /> */}
       </ThemeProvider>
     </Router>
   );

@@ -23,8 +23,8 @@ export default function useSignupForm() {
     await setIsFormLoading(true);
 
     const info = {
-      name: data.userName.toLowerCase(),
-      lastName: data.userLastName.toLowerCase(),
+      name: data.userName,
+      lastName: data.userLastName,
       email: data.userEmail,
       password: data.userPassword,
     };
