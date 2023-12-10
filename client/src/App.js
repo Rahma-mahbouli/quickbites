@@ -20,7 +20,8 @@ import DashboardOrderDetails from "./components/dashboard/DashboardOrderDetails"
 import Menu from "./components/menu/Menu";
 import Home from "./components/home/Home";
 import Contact from "./components/contact/Contact";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import MyProfile from "./components/account/MyProfile";
 import EditMyProfile from "./components/account/EditMyProfile";
 import UserOrdersPage from "./components/account/UserOrdersPage";
@@ -56,60 +57,34 @@ function App() {
     setIsLoading,
   } = useStorage();
 
-  // React.useEffect(() => {
-  //   const onSuccess = (data) => {
-  //     setToken(data.token);
-  //     console.log("data.token",data.token)
-  //     setCurrentUser(data.user);
-  //     console.log("data.user,",data.user)
-  //     if (data.user.name === "admin") {
-  //       setIsAdmin(true);
-  //     } else if (data.user.name === "moderator") {
-  //       setIsModerator(true);
-  //     }
-
-  //     setIsLogin(true);
-  //   };
-  //   const onError = () => {
-  //     setToken("");
-  //     setIsNotLogin();
-  //     setIsAdmin(false);
-  //     setIsModerator(false);
-  //   };
-    
-  //   sessionAPI(onSuccess, onError);
-    
-
-  // }, []);
   useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await fetch("http://localhost:7000/api/users/");
-    //     const data = await response.json();
-    //     console.log("data",data)
-    //     // Assuming data is an array of users
-    //     const isAdmin = data.some((user) => user.name === "admin");
-    //     const isModerator = data.some((user) => user.name === "moderator");
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:7000/api/users/");
+        const data = await response.json();
+        const isAdmin = data.some((user) => user.name === "admin");
+        const isModerator = data.some((user) => user.name === "moderator");
 
-    //     if (isAdmin) {
-    //       setIsAdmin(true);
-    //     } else if (isModerator) {
-    //       setIsModerator(true);
-    //     }
+        if (isAdmin) {
+          setIsAdmin(true);
+        } else if (isModerator) {
+          setIsModerator(true);
+        }
 
-    //     setIsLogin(true);
-    //   } catch (error) {
-    //     console.error("Error fetching user data:", error);
-    //     setToken("");
-    //     setIsNotLogin();
-    //     setIsAdmin(false);
-    //     setIsModerator(false);
-    //   }
-    // };
+        setIsLogin(true);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setToken("");
+        setIsNotLogin();
+        setIsAdmin(false);
+        setIsModerator(false);
+      }
+    };
 
-    // fetchData();
+    fetchData();
   }, []);
-  React.useEffect(() => {
+
+  useEffect(() => {
     const getCategoriesAPI = async () => {
       const headers = new Headers();
       headers.append("Accept", "application/json");
@@ -125,11 +100,9 @@ function App() {
         const { data } = json;
 
         setAllCategories(data);
-        console.log("data",data)
         setIsLoading(false);
       } catch (err) {
         getCategoriesAPI();
-
         console.log(err);
       }
     };
@@ -140,9 +113,8 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      
       <ThemeProvider theme={theme}>
-      <OrderNotificationPopUp
+        <OrderNotificationPopUp
           message={orderActualizationMessage}
           notificationCount={actualizationCount}
           close={closeActualizationNotification}
@@ -152,29 +124,27 @@ function App() {
           notificationCount={newOrdersCount}
           close={closeNewOrderNotification}
         />
-      <SuccessfulFormModal />
+        <SuccessfulFormModal />
         <LoadingPage />
         <ShoppingCart />
         <Header />
-      <Suspense fallback={<LoadingPage />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/menu"  component={Menu} />
-          <Route path="/authentication/login"  component={Login} />
-          <Route path="/authentication/singUp"  component={SignUp} />
-          <Route
+        <Suspense fallback={<LoadingPage />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/menu" element={<Menu />} />
+            <Route path="/authentication/login" element={<Login />} />
+            <Route path="/authentication/singUp" element={<SignUp />} />
+            <Route
               path="/authentication/resetPassword/:token"
-              component={ResetPassword}
-          />
-          <Route path="/contact" component={Contact} />
-        </Routes>
-      </Suspense>
-      <Footer />
+              element={<ResetPassword />}
+            />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </Suspense>
+        <Footer />
       </ThemeProvider>
-      
     </Router>
   );
-  
 }
 
 export default App;

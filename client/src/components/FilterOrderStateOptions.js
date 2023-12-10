@@ -1,25 +1,25 @@
 import { Option, OptionList } from "./SortProductsOptions";
 
 export default function FilterOrdersStateOptions({
-  setStatePreferece,
+  setStatePreference,
   setPage,
   defaultValue,
 }) {
-  const handelChange = (e) => {
+  const handleChange = (e) => {
     e.preventDefault();
     setPage(1);
-    setStatePreferece(e.target.value);
+    setStatePreference(e.target.value);
   };
 
   return (
     <OptionList
       defaultValue={defaultValue}
       name="filterOrdersByState"
-      onChange={(e) => handelChange(e)}
+      onChange={(e) => handleChange(e)}
     >
-      <Option value="all">Todos</Option>
-      <Option value="finish">Liquidados</Option>
-      <Option value="unfinished">Pendientes</Option>
+      <Option value="all">All</Option>
+      <Option value="finish">Completed</Option>
+      <Option value="unfinished">Pending</Option>
     </OptionList>
   );
 }

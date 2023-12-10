@@ -62,7 +62,7 @@ export default function SearchBar({ setSearch, placeholder, defaultValue }) {
       <SearchInput
         name="search"
         defaultValue={defaultValue || ""}
-        placeholder={placeholder || "Buscar..."}
+        placeholder={placeholder || "search..."}
         type="search"
         onChange={resetFilter}
       />
