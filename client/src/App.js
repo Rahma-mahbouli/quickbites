@@ -1,0 +1,180 @@
+import React, { Suspense, lazy, useEffect } from "react";
+import { useStorage } from "./context/useStorage";
+import sessionAPI from "./API/getSessionAPI";
+import useOrderNotification from "./hooks/useOrderNotification";
+import ScrollToTop from "./components/ScrollToTop";
+import { ThemeProvider } from "styled-components";
+import theme from "./theme/styles";
+import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
+import Footer from "./components/Footer";
+import LoadingPage from "./components/LoadingPage";
+import OrderNotificationPopUp from "./components/OrderNotificationPopUp";
+import Header from "./components/Header";
+import NotFound404Page from "./components/NotFound404Page";
+import SuccessfulFormModal from "./components/SuccessfulFormModal";
+import ShoppingCart from "./components/shopping_cart/ShoppingCart";
+import Login from "./components/auth/Login";
+import SignUp from "./components/auth/SignUp";
+import DashboardOrderDetails from "./components/dashboard/DashboardOrderDetails";
+import Menu from "./components/menu/Menu";
+import Home from "./components/home/Home";
+import Contact from "./components/contact/Contact";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import MyProfile from "./components/account/MyProfile";
+import EditMyProfile from "./components/account/EditMyProfile";
+import UserOrdersPage from "./components/account/UserOrdersPage";
+import UserOrderDetailsPage from "./components/account/UserOrderDetailsPage";
+import DashboardNewProduct from "./components/dashboard/DashboardNewProduct";
+import DashboardCategories from "./components/dashboard/DashboardCategories";
+import DashboardOrders from "./components/dashboard/DashboardOrders";
+import DashboardUsers from "./components/dashboard/DashboardUsers";
+import DashboardEditProduct from "./components/dashboard/DashboardEditProduct";
+import DashboardProducts from "./components/dashboard/DashboardProducts";
+
+const EmailConfirmationModal = lazy(() =>
+  import("./components/auth/EmailConfirmationModal")
+);
+const ResetPassword = lazy(() => import("./components/auth/ResetPassword"));
+
+function App() {
+  let {
+    newOrdersCount,
+    actualizationCount,
+    orderActualizationMessage,
+    closeActualizationNotification,
+    closeNewOrderNotification,
+  } = useOrderNotification();
+  const {
+    setToken,
+    setIsNotLogin,
+    setCurrentUser,
+    setIsLogin,
+    setIsAdmin,
+    setIsModerator,
+    setAllCategories,
+    setIsLoading,
+  } = useStorage();
+
+  // React.useEffect(() => {
+  //   const onSuccess = (data) => {
+  //     setToken(data.token);
+  //     console.log("data.token",data.token)
+  //     setCurrentUser(data.user);
+  //     console.log("data.user,",data.user)
+  //     if (data.user.name === "admin") {
+  //       setIsAdmin(true);
+  //     } else if (data.user.name === "moderator") {
+  //       setIsModerator(true);
+  //     }
+
+  //     setIsLogin(true);
+  //   };
+  //   const onError = () => {
+  //     setToken("");
+  //     setIsNotLogin();
+  //     setIsAdmin(false);
+  //     setIsModerator(false);
+  //   };
+    
+  //   sessionAPI(onSuccess, onError);
+    
+
+  // }, []);
+  useEffect(() => {
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await fetch("http://localhost:7000/api/users/");
+    //     const data = await response.json();
+    //     console.log("data",data)
+    //     // Assuming data is an array of users
+    //     const isAdmin = data.some((user) => user.name === "admin");
+    //     const isModerator = data.some((user) => user.name === "moderator");
+
+    //     if (isAdmin) {
+    //       setIsAdmin(true);
+    //     } else if (isModerator) {
+    //       setIsModerator(true);
+    //     }
+
+    //     setIsLogin(true);
+    //   } catch (error) {
+    //     console.error("Error fetching user data:", error);
+    //     setToken("");
+    //     setIsNotLogin();
+    //     setIsAdmin(false);
+    //     setIsModerator(false);
+    //   }
+    // };
+
+    // fetchData();
+  }, []);
+  React.useEffect(() => {
+    const getCategoriesAPI = async () => {
+      const headers = new Headers();
+      headers.append("Accept", "application/json");
+
+      const setting = {
+        method: "GET",
+        headers: headers,
+      };
+      try {
+        let res = await fetch("/api/categories", setting);
+        let json = await res.json();
+
+        const { data } = json;
+
+        setAllCategories(data);
+        console.log("data",data)
+        setIsLoading(false);
+      } catch (err) {
+        getCategoriesAPI();
+
+        console.log(err);
+      }
+    };
+
+    getCategoriesAPI();
+  }, []);
+
+  return (
+    <Router>
+      <ScrollToTop />
+      
+      <ThemeProvider theme={theme}>
+      <OrderNotificationPopUp
+          message={orderActualizationMessage}
+          notificationCount={actualizationCount}
+          close={closeActualizationNotification}
+        />
+        <OrderNotificationPopUp
+          message="Nuevos Pedidos"
+          notificationCount={newOrdersCount}
+          close={closeNewOrderNotification}
+        />
+      <SuccessfulFormModal />
+        <LoadingPage />
+        <ShoppingCart />
+        <Header />
+      <Suspense fallback={<LoadingPage />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/menu"  component={Menu} />
+          <Route path="/authentication/login"  component={Login} />
+          <Route path="/authentication/singUp"  component={SignUp} />
+          <Route
+              path="/authentication/resetPassword/:token"
+              component={ResetPassword}
+          />
+          <Route path="/contact" component={Contact} />
+        </Routes>
+      </Suspense>
+      <Footer />
+      </ThemeProvider>
+      
+    </Router>
+  );
+  
+}
+
+export default App;
