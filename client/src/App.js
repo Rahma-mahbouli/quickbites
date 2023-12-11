@@ -95,7 +95,7 @@ function App() {
         headers: headers,
       };
       try {
-        let res = await fetch("/api/categories", setting);
+        let res = await fetch("http://localhost:7000/api/categories", setting);
         let json = await res.json();
 
         const { data } = json;
@@ -140,16 +140,16 @@ function App() {
               element={<ResetPassword />}
             />
             <Route path="/contact" element={<Contact />} />
-            {/* <PublicRoute
+            <Route
               path="/authentication/confirmation"
-              component={EmailConfirmationModal}
+              component={<EmailConfirmationModal/>}
             />
-            <PublicRoute path="/myAccount/myProfile" component={MyProfile} />
-            <PublicRoute
+            <Route path="/myAccount/myProfile" component={<MyProfile/>} />
+            <Route
               path="/myAccount/editProfile"
-              component={EditMyProfile}
+              component={<EditMyProfile/>}
             />
-            <PublicRoute
+            <Route
               path="/myAccount/myOrders"
               exact
               component={() => (
@@ -157,10 +157,10 @@ function App() {
               )}
             />
 
-            <PublicRoute
+            <Route
               path="/myAccount/myOrders/:orderID"
-              component={UserOrderDetailsPage}
-            /> */}
+              component={<UserOrderDetailsPage/>}
+            />
             <Route
               path="/dashboard/myProducts"
               element={<DashboardProducts/>}
@@ -175,14 +175,16 @@ function App() {
             />
             <Route path="/dashboard/users" element={<DashboardUsers/>} />
             <Route
-              path="/dashboard/orders"
-              exact
-              element={() => (
-                <DashboardOrders
-                  closeNotification={closeActualizationNotification}
-                />
-              )}
-            />
+  path="/dashboard/orders"
+  exact
+  element={() => (
+    <DashboardOrders
+      closeNotification={closeActualizationNotification}
+    />
+  )}
+/>
+
+ 
             <Route
               path="/dashboard/orders/:orderID"
               element={<DashboardOrderDetails/>}

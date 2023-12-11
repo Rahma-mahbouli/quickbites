@@ -20,23 +20,23 @@ const CategoriesPage = styled(Page)`
 `;
 
 const Input = styled(TextInput)`
-background: rgb(0 0 0 / 7%);
-      box-shadow: :${(props) => props.theme.inputBoxShadow};
+  background: rgb(0 0 0 / 7%);
+  box-shadow: ${(props) => props.theme.inputBoxShadow};
 `;
+
 const Wrapper = styled.section`
-width:100%:
-max-width:1250px;
-margin:30px auto;
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:10px;
-&> article{
-  flex: 1 1 400px;
   width: 100%;
-}
+  max-width: 1250px;
+  margin: 30px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 
-
+  & > article {
+    flex: 1 1 400px;
+    width: 100%;
+  }
 `;
 
 const FormCard = styled.article`
@@ -48,10 +48,12 @@ const FormCard = styled.article`
   height: max-content;
   background: #fff;
   box-shadow: ${(props) => props.theme.lightBoxShadow};
+
   & > h4 {
     margin: 10px 0 24px;
     font-size: 25px;
   }
+
   & > form h4 {
     margin: 10px 0 24px;
     font-size: 25px;
@@ -60,6 +62,7 @@ const FormCard = styled.article`
   & > form select {
     min-width: 95%;
   }
+
   & > form small {
     position: absolute;
     margin-top: -18px;
@@ -67,22 +70,21 @@ const FormCard = styled.article`
   }
 
   & > form buttons {
-    transfor: scale(0.8);
+    transform: scale(0.8);
     position: absolute;
     margin-top: -18px;
     margin-left: 10px;
   }
+
   @media screen and (max-width: 450px) {
-    & > h4 {
-      line-height: 24px;
-      font-size: 20px;
-    }
+    & > h4,
     & > form h4 {
       line-height: 24px;
       font-size: 20px;
     }
   }
 `;
+
 const DeleteButton = styled.button`
   padding: 11px 25px 12px;
   transition: all 0.5s;
@@ -97,10 +99,13 @@ const DeleteButton = styled.button`
   font-size: 15px;
   font-family: "Oswald", sans-serif;
   border-radius: 4px;
+
   &:hover {
     background: ${(props) => props.theme.orange};
   }
-`;
+  `;
+
+
 function DashboardCategories() {
   const {
     handleRenameSubmit,
@@ -116,11 +121,11 @@ function DashboardCategories() {
   return (
     <CategoriesPage>
       <DashboardNav />
-      <SectionTitle light>Categorías</SectionTitle>
+      <SectionTitle light>Categories</SectionTitle>
 
       <Wrapper>
         <FormCard>
-          <h4>Elimeinar categoría</h4>
+          <h4>Delete Category</h4>
 
           <form name="editCategory" onSubmit={handleRenameSubmit}>
             <OptionList
@@ -134,31 +139,33 @@ function DashboardCategories() {
               ))}
             </OptionList>
 
-            <DeleteButton onClick={handleDelete}>Eliminar</DeleteButton>
+            <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
+
             {isDeleteFormLoading && <LoaderSpinner small />}
-            <hr></hr>
+            <hr />
 
-            <h4>Remombrar categoría</h4>
+            <h4>Rename Category</h4>
 
-            <Input placeholder={"Renombrar Categoría"} name="categoryNewName" />
+            <Input placeholder={"Rename Category"} name="categoryNewName" />
             {isRenameFormLoading && <LoaderSpinner small />}
-            <LoadButton as="input" type="submit" value="Editar" />
+            <LoadButton as="input" type="submit" value="Edit" />
           </form>
         </FormCard>
 
         <FormCard>
-          <h4>Crear una nueva categoría</h4>
+          <h4>Create a New Category</h4>
 
           <form name="createCategory" onSubmit={handleCreateSubmit}>
-            <Input placeholder="Nueva categoría..." name="newCategory" />
+            <Input placeholder="New category..." name="newCategory" />
 
             {isCreateFormLoading && <LoaderSpinner small />}
 
-            <LoadButton as="input" type="submit" value="Cargar" />
+            <LoadButton as="input" type="submit" value="Upload" />
           </form>
         </FormCard>
       </Wrapper>
     </CategoriesPage>
   );
 }
+
 export default withError(DashboardCategories);
