@@ -95,12 +95,10 @@ export const FormLink = styled(Link)`
   }
 `;
 
-export function UserNameInput({ register, errors, defaultValue }) {
+export function UserNameInput({   defaultValue }) {
   return (
     <Fragment>
-      {errors.userName && (
-        <ErrorMessage>{errors.userName.message}</ErrorMessage>
-      )}
+   
 
       <TextInput
         placeholder="Your name..."
@@ -109,18 +107,16 @@ export function UserNameInput({ register, errors, defaultValue }) {
         defaultValue={defaultValue || ""}
         data-testid="nameInput"
       
-        style={{ borderColor: errors.userName && "#bf0000" }}
+        
       />
     </Fragment>
   );
 }
 
-export function UserLastNameInput({ register, errors, defaultValue }) {
+export function UserLastNameInput({   defaultValue }) {
   return (
     <Fragment>
-      {errors.userLastName && (
-        <ErrorMessage>{errors.userLastName.message}</ErrorMessage>
-      )}
+  
 
       <TextInput
         type="text"
@@ -128,61 +124,58 @@ export function UserLastNameInput({ register, errors, defaultValue }) {
         data-testid="lastNameInput"
         defaultValue={defaultValue || ""}
         name="userLastName"
-        
-        style={{ borderColor: errors.userLastName && "#bf0000" }}
+            
       />
     </Fragment>
   );
 }
 
-export function UserEmailInput({ errors, name }) {
+export function UserEmailInput({  name }) {
   return (
     <Fragment>
-      {errors[name] && <ErrorMessage>{errors[name].message}</ErrorMessage>}
+     
 
       <TextInput
         type="email"
         placeholder="Your email..."
         name={name}
         data-testid="emailInput"
-        style={{ borderColor: errors[name] && "#bf0000" }}
+       
       />
     </Fragment>
   );
 }
 
 export function UserPasswordInput({
-  errors,
+ 
   placeholder,
   name = "userPassword",
 }) {
   return (
     <Fragment>
-      {errors[name] && <ErrorMessage>{errors[name].message}</ErrorMessage>}
+      
 
       <TextInput
         placeholder={placeholder}
         type="password"
         name={name}
         data-testid="passwordInput"
-        style={{ borderColor: errors[name] && "#bf0000" }}
+       
       />
     </Fragment>
   );
 }
 
-export function UserNewPasswordInput({ errors, placeholder }) {
+export function UserNewPasswordInput({  placeholder }) {
   return (
     <Fragment>
-      {errors.userNewPassword && (
-        <ErrorMessage>{errors.userNewPassword.message}</ErrorMessage>
-      )}
+    
 
       <TextInput
         placeholder={placeholder}
         type="password"
         name="userNewPassword"
-        style={{ borderColor: errors.userNewPassword && "#bf0000" }}
+       
       />
     </Fragment>
   );
@@ -190,7 +183,7 @@ export function UserNewPasswordInput({ errors, placeholder }) {
 
 export default function SignupForm() {
   const {
-    register,
+    
     handleSubmit,
     errors,
     onSubmit,
@@ -202,10 +195,10 @@ export default function SignupForm() {
     <FormCard>
       <Logo src={burgerIcon} alt="LogoBrand" />
       <Form data-testid="singUpForm" onSubmit={handleSubmit(onSubmit)}>
-        <UserNameInput errors={errors} />
-        <UserLastNameInput errors={errors} />
-        <UserEmailInput errors={errors} />
-        <UserPasswordInput errors={errors} placeholder="Your password..." />
+        <UserNameInput  />
+        <UserLastNameInput  />
+        <UserEmailInput  />
+        <UserPasswordInput  placeholder="Your password..." />
 
         <ErrorServerMessage>{serverError}</ErrorServerMessage>
 

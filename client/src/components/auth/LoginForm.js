@@ -127,7 +127,7 @@ export default function SimpleLoginForm() {
 
         if (user.name === 'admin') {
           // Navigate to the admin dashboard
-          navigate('/dashboard/orders');
+          navigate('/dashboard/myProducts');
         } else if (user.name === 'moderator') {
           // Navigate to the moderator dashboard
           navigate('/dashboard/myProducts');

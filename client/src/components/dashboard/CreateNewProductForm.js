@@ -1,11 +1,17 @@
-import styled from "styled-components";
-import usePostNewProductForm from "../../hooks/usePostNewProductForm";
-import { Fragment } from "react";
-import { LoaderSpinner } from "./../LoaderSpinner";
-import { ErrorMessage } from "../contact/ContactForm";
-import trayIcon from "../../img/tray.svg";
-import { FormCard, Form, Logo } from "../auth/SignupForm";
-import { ButtonPrimary, Button } from "../Buttons";
+import React, { useEffect, useState } from 'react';
+import { Fragment } from 'react';
+import axios from "axios";
+import styled from 'styled-components';
+import { LoaderSpinner } from './../LoaderSpinner';
+import trayIcon from '../../img/tray.svg';
+import {
+  FormCard,
+  Form,
+  Logo,
+ 
+  ErrorMessage,
+} from '../auth/SignupForm';
+import { Button, ButtonPrimary } from '../Buttons';
 
 export const StyledSection = styled.section`
   position: relative;
@@ -76,7 +82,7 @@ export const ThisForm = styled(Form)`
 `;
 
 export const TextInput = styled.input.attrs((props) => ({
-  type: "text",
+  type: 'text',
 }))`
   &::placeholder {
     font-weight: 500;
@@ -161,7 +167,7 @@ export const DropZone = styled.input`
     font-weight: 600;
     align-items: center;
     border-radius: 3px;
-    content: "Select Image";
+    content: 'Select Image';
     position: absolute;
     left: 0;
     right: 0;
@@ -201,7 +207,7 @@ export const Option = styled.option`
 `;
 
 export function CategoriesOptionsInput({
-  register,
+ 
   categories,
   defaultValue,
 }) {
@@ -220,23 +226,17 @@ export function CategoriesOptionsInput({
 }
 
 export function ProductNameInput({
-  register,
-  errors,
+ 
   defaultValue,
 }) {
   return (
     <Fragment>
-      {errors.name && (
-        <ErrorMessage role="alert">
-          {errors.name.message}
-        </ErrorMessage>
-      )}
-
+      
       <TextInput
-        style={{ borderColor: errors.productName && "#bf0000" }}
+        
         placeholder="Name..."
         data-testid="name"
-        defaultValue={defaultValue || ""}
+        defaultValue={defaultValue || ''}
         name="name"
       />
     </Fragment>
@@ -244,44 +244,34 @@ export function ProductNameInput({
 }
 
 export function ProductSizeInput({
-  register,
-  errors,
+ 
   defaultValue,
 }) {
   return (
     <Fragment>
-      {errors.size && (
-        <ErrorMessage role="alert">
-          {errors.size.message}
-        </ErrorMessage>
-      )}
+      
       <TextInput
-        style={{ borderColor: errors.size && "#bf0000" }}
+         
         placeholder="Quantity/Size..."
         data-testid="size"
         name="size"
-        defaultValue={defaultValue || ""}
+        defaultValue={defaultValue || ''}
       />
     </Fragment>
   );
 }
 
 export function ProductDescriptionTextArea({
-  register,
-  errors,
+ 
   defaultValue,
 }) {
   return (
     <Fragment>
-      {errors.description && (
-        <ErrorMessage role="alert">
-          {errors.description.message}
-        </ErrorMessage>
-      )}
+ 
       <Description
         placeholder="Description..."
-        style={{ borderColor: errors.description && "#bf0000" }}
-        defaultValue={defaultValue || ""}
+        
+        defaultValue={defaultValue || ''}
         name="description"
         data-testid="description"
       ></Description>
@@ -290,41 +280,31 @@ export function ProductDescriptionTextArea({
 }
 
 export function ProductPriceInput({
-  register,
-  errors,
+ 
   defaultValue,
 }) {
   return (
     <Fragment>
-      {errors.productPrice && (
-        <ErrorMessage role="alert">
-          {errors.productPrice.message}
-        </ErrorMessage>
-      )}
+      
 
       <TextInput
         placeholder="Price..."
-        style={{ borderColor: errors.productPrice && "#bf0000" }}
+        
         name="price"
         data-testid="price"
-        defaultValue={defaultValue || ""}
+        defaultValue={defaultValue || ''}
       />
     </Fragment>
   );
 }
 
 export function ImageUploader({
-  register,
-  errors,
+ 
   isNotRequired,
 }) {
   return (
     <Fragment>
-      {errors.productImg && (
-        <ErrorMessage role="alert">
-          *This field is required
-        </ErrorMessage>
-      )}
+      
 
       <DropZone
         id="imgInput"
@@ -361,40 +341,75 @@ export function ProductState(props) {
 }
 
 export default function UpdateNewProductForm() {
-  const {
-    register,
-    handleSubmit,
-    errors,
-    onSubmit,
-    formIsLoading,
-    categories,
-  } = usePostNewProductForm();
+  const [formIsLoading, setFormIsLoading] = useState(false);
+  const [formError, setFormError] = useState(null);
+  const [categories, setCategories] = useState([]);
+  console.log('categories',categories)
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        // Fetch categories from your API
+        const res = await axios.get("http://localhost:7000/api/categories");
+      
+        setCategories(res.data.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    // Call the fetchCategories function when the component mounts
+    fetchCategories();
+  }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormError(null);
+    setFormIsLoading(true);
+
+    try {
+      // Your form submission logic here
+      const formData = new FormData(e.target);
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        setFormError(result.message || 'Failed to submit the form.');
+      } else {
+        // Handle success, e.g., redirect or show a success message
+        console.log('Form submitted successfully');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setFormError('Failed to submit the form. Please try again.');
+    } finally {
+      setFormIsLoading(false);
+    }
+  };
 
   return (
     <StyledSection>
       <ThisFormCard>
         <Logo src={trayIcon} alt="new-product"></Logo>
-        <ThisForm
-          id="productsFactory"
-          name="productsFactory"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <ThisForm onSubmit={handleSubmit}>
           <FormTitle>Upload new products</FormTitle>
 
-          <ProductNameInput errors={errors} />
+          <ProductNameInput  />
 
-          <ProductSizeInput errors={errors} />
+          <ProductSizeInput  />
 
-          <ProductPriceInput errors={errors} />
+          <ProductPriceInput  />
           <CategoriesOptionsInput
-            errors={errors}
+           
             categories={categories}
           />
-          <ProductDescriptionTextArea errors={errors} />
+          <ProductDescriptionTextArea  />
 
           <ProductState state="checked" />
 
-          <ImageUploader errors={errors} />
+          <ImageUploader  />
           {formIsLoading && (
             <LoaderSpinner small data-testid="spinner" />
           )}

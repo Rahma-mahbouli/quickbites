@@ -98,7 +98,9 @@ function App() {
         let res = await fetch("http://localhost:7000/api/categories", setting);
         let json = await res.json();
 
+
         const { data } = json;
+        
 
         setAllCategories(data);
         setIsLoading(false);
@@ -134,7 +136,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/authentication/login" element={<Login />} />
-            <Route path="/authentication/signUp" element={<SignUp />} />
+            <Route path="/authentication/singUp" element={<SignUp />} />
             <Route
               path="/authentication/resetPassword/:token"
               element={<ResetPassword />}
@@ -195,7 +197,7 @@ function App() {
             />
           </Routes>
         </Suspense>
-        {/* <Footer /> */}
+        <Footer />
       </ThemeProvider>
     </Router>
   );
